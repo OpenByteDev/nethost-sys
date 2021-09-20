@@ -1,12 +1,4 @@
-use std::{
-    borrow::Cow,
-    env,
-    error::Error,
-    fs::{create_dir_all, File},
-    io::{self, Cursor, Read},
-    path::Path,
-    str::FromStr,
-};
+use std::{borrow::Cow, env, error::Error, fs::{create_dir_all, File}, io::{self, Cursor, Read}, path::{Path, PathBuf}, str::FromStr};
 
 use build_target::{Arch, Env, Os};
 use semver::Version;
