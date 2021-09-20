@@ -9,10 +9,10 @@ pub type char_t = std::os::raw::c_char;
 /// The char type used in `nethost` and `hostfxr`. Defined as [`u16`] on windows and as [`c_char`](rs_ctypes::c_char) otherwise.
 #[cfg(all(not(windows), not(std)))]
 pub type char_t = rs_ctypes::c_char;
-/// The char type used in `nethost` and `hostfxr`. Defined as [`u16`] on windows and as [`c_char`](rs_ctypes::c_char) otherwise.
+/// The char type used in `nethost` and `hostfxr`. Defined as [`u16`] on windows and as [`c_char`](std::os::raw::c_char) otherwise.
 #[cfg(all(windows, std))]
 pub type char_t = u16;
-/// The char type used in `nethost` and `hostfxr`. Defined as [`u16`] on windows and as [`c_char`](std::os::raw::c_char) otherwise.
+/// The char type used in `nethost` and `hostfxr`. Defined as [`u16`] on windows and as [`c_char`](rs_ctypes::c_char) otherwise.
 #[cfg(all(windows, not(std)))]
 pub type char_t = u16;
 
