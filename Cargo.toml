@@ -26,6 +26,4 @@ semver = { version = "1.0", optional = true }
 zip = { version = "0.5", optional = true }
 
 [features]
-default = ["std"]
-std = []
 download-nuget = ["reqwest", "serde", "serde_json", "semver", "zip"]
