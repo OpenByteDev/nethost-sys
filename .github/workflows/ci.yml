@@ -30,7 +30,7 @@ jobs:
           toolchain: nightly
           override: true
     - name: Build
-      run: cargo build --target ${{ matrix.target }}
+      run: cargo build --target ${{ matrix.target }} --all-features
     - name: Generate documentation
       run: cargo doc --all-features
     - name: Clippy check
