@@ -23,12 +23,13 @@ jobs:
             target: x86_64-pc-windows-msvc
     steps:
     - uses: actions/checkout@v2
-    - name: Install latest nightly
+    - name: Install latest stable
       uses: actions-rs/toolchain@v1
       with:
           target: ${{ matrix.target }}
-          toolchain: nightly
-          override: true
+          profile: minimal
+          toolchain: stable
+          components: clippy
     - name: Build
       run: cargo build --target ${{ matrix.target }} --all-features
     - name: Generate documentation
