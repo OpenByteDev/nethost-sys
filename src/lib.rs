@@ -1,5 +1,14 @@
 #![no_std]
-#![allow(non_camel_case_types)]
+#![warn(clippy::pedantic, clippy::cargo, unsafe_op_in_unsafe_fn)]
+#![allow(
+    clippy::missing_safety_doc,
+    clippy::missing_errors_doc,
+    clippy::missing_panics_doc,
+    clippy::module_name_repetitions,
+    clippy::multiple_crate_versions,
+    clippy::doc_markdown,
+    non_camel_case_types, dead_code
+)]
 
 //! FFI bindings for [nethost](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md#components-of-the-hosting).
 //! 
