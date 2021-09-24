@@ -1,7 +1,7 @@
 [package]
 name = "nethost-sys"
-version = "0.1.0"
-description = "FFI bindings for nethost"
+version = "0.2.0"
+description = "FFI bindings for nethost."
 readme = "README.md"
 repository = "https://github.com/OpenByteDev/nethost-syst"
 homepage = "https://github.com/OpenByteDev/nethost-sys"
