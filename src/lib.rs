@@ -25,7 +25,7 @@
 //! - [Write a custom .NET Core host to control the .NET runtime from your native code](https://docs.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting)
 //! 
 //! ## License
-//! Licensed under the MIT license ([LICENSE](https://github.com/OpenByteDev/nethost-sys/blob/master/LICENSE) or http://opensource.org/licenses/MIT)
+//! Licensed under the MIT license ([LICENSE](https://github.com/OpenByteDev/nethost-sys/blob/master/LICENSE) or <http://opensource.org/licenses/MIT>)
 
 use coreclr_hosting_shared::{char_t, size_t};
 
