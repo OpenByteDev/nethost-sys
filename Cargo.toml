@@ -15,7 +15,7 @@ keywords = ["nethost", "dotnet", "bindings", "coreclr"]
 build = "build/mod.rs"
 
 [dependencies]
-rs-ctypes = "0.1"
+coreclr-hosting-shared = "0.1"
 
 [build-dependencies]
 build-target = { version = "0.2" }

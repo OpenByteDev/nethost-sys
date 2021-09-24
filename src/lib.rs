@@ -3,21 +3,7 @@
 
 //! FFI bindings for [nethost](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md#components-of-the-hosting).
 
-/// The char type used in `nethost` and `hostfxr`. Defined as [`u16`] on windows and as [`c_char`](std::os::raw::c_char) otherwise.
-#[cfg(all(not(windows), std))]
-pub type char_t = std::os::raw::c_char;
-/// The char type used in `nethost` and `hostfxr`. Defined as [`u16`] on windows and as [`c_char`](rs_ctypes::c_char) otherwise.
-#[cfg(all(not(windows), not(std)))]
-pub type char_t = rs_ctypes::c_char;
-/// The char type used in `nethost` and `hostfxr`. Defined as [`u16`] on windows and as [`c_char`](std::os::raw::c_char) otherwise.
-#[cfg(all(windows, std))]
-pub type char_t = u16;
-/// The char type used in `nethost` and `hostfxr`. Defined as [`u16`] on windows and as [`c_char`](rs_ctypes::c_char) otherwise.
-#[cfg(all(windows, not(std)))]
-pub type char_t = u16;
-
-/// Equivalent to `size_t` in C.
-pub type size_t = usize; // TODO: use `std::os::raw::c_size_t` instead once stabilized.
+use coreclr_hosting_shared::{char_t, size_t};
 
 // for some reason we need the link attribute here for unix, but the rustc argument in build.rs for windows.
 // #[cfg_attr(windows, link(name = "libnethost"))]
