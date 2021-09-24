@@ -28,6 +28,7 @@
 //! Licensed under the MIT license ([LICENSE](https://github.com/OpenByteDev/nethost-sys/blob/master/LICENSE) or <http://opensource.org/licenses/MIT>)
 
 use coreclr_hosting_shared::{char_t, size_t};
+use core::{ptr, mem};
 
 // for some reason we need the link attribute here for unix, but the rustc argument in build.rs for windows.
 // #[cfg_attr(windows, link(name = "libnethost"))]
@@ -81,4 +82,27 @@ pub struct get_hostfxr_parameters {
     /// `dotnet app.dll`, which means it will be searched for under the `dotnet_root`
     /// path and the `assembly_path` is ignored.
     pub dotnet_root: *const char_t,
+}
+
+impl get_hostfxr_parameters {
+    /// Creates a new instance of [`get_hostfxr_parameters`] with the given `dotnet_root`.
+    /// The `size` field is set accordingly to the size of the struct and `assembly_path` to [`ptr::null()`].
+    #[must_use]
+    pub fn with_dotnet_root(dotnet_root: *const char_t) -> Self {
+        Self {
+            size: mem::size_of::<Self>(),
+            assembly_path: ptr::null(),
+            dotnet_root,
+        }
+    }
+    /// Creates a new instance of [`get_hostfxr_parameters`] with the given `assembly_path`.
+    /// The `size` field is set accordingly to the size of the struct and `dotnet_root` to [`ptr::null()`].
+    #[must_use]
+    pub fn with_assembly_path(assembly_path: *const char_t) -> Self {
+        Self {
+            size: mem::size_of::<Self>(),
+            assembly_path,
+            dotnet_root: ptr::null(),
+        }
+    }
 }
