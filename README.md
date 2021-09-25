@@ -12,17 +12,17 @@ FFI bindings for [nethost](https://github.com/dotnet/runtime/blob/main/docs/desi
 
 Supports automatically downloading the lastest [nethost](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md#components-of-the-hosting) binary from [NuGet](https://www.nuget.org/) with the `download-nuget` feature.
 
-# Related crates
+### Related crates
 - [hostfxr-sys](https://crates.io/crates/hostfxr-sys) - bindings for the hostfxr library.
 - [coreclr-hosting-shared](https://crates.io/crates/coreclr-hosting-shared) - shared bindings between this crate and [hostfxr-sys](https://crates.io/crates/hostfxr-sys).
 - [netcorehost](https://crates.io/crates/netcorehost) - rusty wrapper over the nethost and hostfxr libraries.
 
-## Additional Information
+### Additional Information
 - [Hosting layer APIs](https://github.com/dotnet/core-setup/blob/master/Documentation/design-docs/hosting-layer-apis.md)
 - [Native hosting](https://github.com/dotnet/core-setup/blob/master/Documentation/design-docs/native-hosting.md#runtime-properties)
 - [Write a custom .NET Core host to control the .NET runtime from your native code](https://docs.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting)
 
-## License
+### License
 Licensed under the MIT license ([LICENSE](https://github.com/OpenByteDev/nethost-sys/blob/master/LICENSE) or http://opensource.org/licenses/MIT)
 
 <!-- cargo-sync-readme end -->

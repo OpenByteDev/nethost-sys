@@ -14,7 +14,7 @@
 //! 
 //! Supports automatically downloading the lastest [nethost](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md#components-of-the-hosting) binary from [NuGet](https://www.nuget.org/) with the `download-nuget` feature.
 //! 
-//! # Related crates
+//! ## Related crates
 //! - [hostfxr-sys](https://crates.io/crates/hostfxr-sys) - bindings for the hostfxr library.
 //! - [coreclr-hosting-shared](https://crates.io/crates/coreclr-hosting-shared) - shared bindings between this crate and [hostfxr-sys](https://crates.io/crates/hostfxr-sys).
 //! - [netcorehost](https://crates.io/crates/netcorehost) - rusty wrapper over the nethost and hostfxr libraries.
