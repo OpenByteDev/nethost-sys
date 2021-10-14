@@ -12,7 +12,7 @@ env:
   RUSTFLAGS: "--deny warnings"
       
 jobs:
-  test:
+  ci:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
