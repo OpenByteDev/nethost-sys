@@ -12,7 +12,7 @@
 
 //! FFI bindings for [nethost](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md#components-of-the-hosting).
 //! 
-//! Supports automatically downloading the lastest [nethost](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md#components-of-the-hosting) binary from [NuGet](https://www.nuget.org/) with the `download-nuget` feature.
+//! Supports automatically downloading the latest version of the [nethost](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md#components-of-the-hosting) library from [NuGet](https://www.nuget.org/packages/Microsoft.NETCore.DotNetHost/) with the `download-nuget` feature.
 //! 
 //! ## Related crates
 //! - [hostfxr-sys](https://crates.io/crates/hostfxr-sys) - bindings for the hostfxr library.
@@ -56,7 +56,7 @@ extern "system" {
     ///
     /// # Return value
     ///  * `0` on success, otherwise failure
-    ///  * `0x80008098` - `buffer` is too small (`HostApiBufferTooSmall`)
+    ///  * `0x80008098` - `buffer` is too small ([`HostApiBufferTooSmall`](https://docs.rs/coreclr-hosting-shared/0.1.2/coreclr_hosting_shared/enum.StatusCode.html#variant.HostApiBufferTooSmall)
     ///
     /// # Remarks
     /// The full search for the hostfxr library is done on every call. To minimize the need
