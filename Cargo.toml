@@ -22,7 +22,7 @@ reqwest = { version = "0.11", features = ["blocking", "json"], optional = true }
 serde = { version = "1.0", features = ["derive"], optional = true }
 serde_json = { version = "1.0", optional = true }
 semver = { version = "1.0", optional = true }
-zip = { version = "0.5", optional = true }
+zip = { version = "0.6", optional = true }
 
 [features]
 download-nuget = ["reqwest", "serde", "serde_json", "semver", "zip"]
