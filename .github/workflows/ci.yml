@@ -12,10 +12,11 @@ env:
   RUSTFLAGS: "--deny warnings"
       
 jobs:
-  test:
+  ci:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: ["windows-latest", "ubuntu-latest"]
         toolchain: ["stable", "nightly"]
         include:
           - os: ubuntu-latest
