@@ -8,7 +8,7 @@ use std::{
     str::FromStr,
 };
 
-use platforms::{Arch, Env, OS};
+use build_target::{Arch, Env, Os};
 use semver::Version;
 use serde::{Deserialize, Serialize};
 use zip::ZipArchive;
@@ -57,30 +57,24 @@ struct PackageInfoCatalogEntry<'a> {
     version: Cow<'a, str>,
 }
 
-#[cfg_attr(all(feature = "download-nuget-system", feature = "download-nuget-target"), allow(unreachable_code, unused_variables))]
 pub fn download_nethost_from_nuget() -> Result<PathBuf, Box<dyn std::error::Error>> {
-    #[cfg(all(feature = "download-nuget-system", feature = "download-nuget-target"))]
-    panic!("Only one of the 'download-nuget-system' and 'download-nuget-target' features can be enabled at the same time.");
-    #[cfg(not(feature = "download-nuget-target"))]
-    let platform_triple = current_platform::CURRENT_PLATFORM;
-    #[cfg(feature = "download-nuget-target")]
-    let platform_triple = build_target::target_triple().unwrap();
-
-    let platform = platforms::Platform::find(&platform_triple).unwrap();
+    let os = Os::target().unwrap();
+    let arch = Arch::target().unwrap();
+    let env = Env::target().unwrap();
 
     #[rustfmt::skip]
-    let target = match (platform.target_os, platform.target_arch, platform.target_env) {
-        (OS::Windows, Arch::X86,     _) => "win-x86",
-        (OS::Windows, Arch::X86_64,  _) => "win-x64",
-        (OS::Windows, Arch::Arm,     _) => "win-arm",
-        (OS::Windows, Arch::AArch64, _) => "win-arm64",
-        (OS::Linux,   Arch::X86_64,  Env::Musl) => "linux-musl-x64",
-        (OS::Linux,   Arch::Arm,     Env::Musl) => "linux-musl-arm",
-        (OS::Linux,   Arch::AArch64, Env::Musl) => "linux-musl-arm64",
-        (OS::Linux,   Arch::X86_64,  _) => "linux-x64",
-        (OS::Linux,   Arch::Arm,     _) => "linux-arm",
-        (OS::Linux,   Arch::AArch64, _) => "linux-arm64",
-        (OS::MacOS,   Arch::X86_64,  _) => "osx-x64",
+    let target = match (&os, arch, env) {
+        (Os::Windows, Arch::X86,     _) => "win-x86",
+        (Os::Windows, Arch::X86_64,  _) => "win-x64",
+        (Os::Windows, Arch::ARM,     _) => "win-arm",
+        (Os::Windows, Arch::AARCH64, _) => "win-arm64",
+        (Os::Linux,   Arch::X86_64,  Env::Musl) => "linux-musl-x64",
+        (Os::Linux,   Arch::ARM,     Env::Musl) => "linux-musl-arm",
+        (Os::Linux,   Arch::AARCH64, Env::Musl) => "linux-musl-arm64",
+        (Os::Linux,   Arch::X86_64,  _) => "linux-x64",
+        (Os::Linux,   Arch::ARM,     _) => "linux-arm",
+        (Os::Linux,   Arch::AARCH64, _) => "linux-arm64",
+        (Os::MacOs,   Arch::X86_64,  _) => "osx-x64",
         _ => panic!("platform not supported."),
     };
 

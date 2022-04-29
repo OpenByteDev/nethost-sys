@@ -10,9 +10,7 @@
 
 FFI bindings for [nethost](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md#components-of-the-hosting).
 
-Supports automatically downloading the latest version of the [nethost](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md#components-of-the-hosting) library from [NuGet](https://www.nuget.org/packages/Microsoft.NETCore.DotNetHost/) with the `download-nuget` features.
-- `download-nuget-system` will download the latest version for the current platform.
-- `download-nuget-target` will download the latest version for the target platform.
+Supports automatically downloading the latest version of the [nethost](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md#components-of-the-hosting) library from [NuGet](https://www.nuget.org/packages/Microsoft.NETCore.DotNetHost/) with the `download-nuget` feature.
 
 ### Related crates
 - [hostfxr-sys](https://crates.io/crates/hostfxr-sys) - bindings for the hostfxr library.
