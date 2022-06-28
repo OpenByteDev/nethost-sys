@@ -18,8 +18,8 @@ coreclr-hosting-shared = "0.1"
 
 [build-dependencies]
 build-target = "0.4"
-reqwest = { version = "0.11", features = ["blocking", "json"], optional = true }
 cargo-emit = "0.2"
+reqwest = { version = "0.11", features = ["blocking", "json", "rustls-tls"], default-features = false, optional = true }
 serde = { version = "1.0", features = ["derive"], optional = true }
 serde_json = { version = "1.0", optional = true }
 semver = { version = "1.0", optional = true }
