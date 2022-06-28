@@ -10,7 +10,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // NOTE: for some reason we need the rustc argument here, but the link attribute in lib.rs for other os.
     // For more information see https://github.com/OpenByteDev/netcorehost/issues/2.
     if build_target::target_os() == Ok(Os::Windows) {
-        println!("cargo:rustc-link-lib=libnethost");
+        cargo_emit::rustc_link_lib!("libnethost");
     }
 
     Ok(())

@@ -86,8 +86,8 @@ pub fn download_nethost_from_nuget() -> Result<PathBuf, Box<dyn std::error::Erro
         download_nethost(target, &runtime_dir)?;
     }
 
-    println!("cargo:rerun-if-changed={}", runtime_dir.to_str().unwrap());
-    println!("cargo:rustc-link-search={}", runtime_dir.to_str().unwrap());
+    cargo_emit::rerun_if_changed!(runtime_dir.to_str().unwrap());
+    cargo_emit::rustc_link_search!(runtime_dir.to_str().unwrap());
 
     Ok(runtime_dir)
 }
