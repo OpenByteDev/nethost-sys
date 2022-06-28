@@ -100,7 +100,7 @@ pub fn download_nethost(target: &str, target_path: &Path) -> Result<(), Box<dyn 
         .send()
         .expect("Failed to query nuget.org index for nethost package. Are you connected to the internet?")
         .json::<ResourceIndex>()
-        .expect("Failed to parse json response from nuget.org2.");
+        .expect("Failed to parse json response from nuget.org.");
     let registrations_base_url = index
         .resources
         .into_iter()
