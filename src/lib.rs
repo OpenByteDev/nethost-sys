@@ -31,7 +31,8 @@
 use core::{mem, ptr};
 use coreclr_hosting_shared::{char_t, size_t};
 
-#[cfg_attr(windows, link(name = "libnethost"))]
+// for some reason we need the link attribute here for unix, but the rustc argument in build.rs for windows.
+// #[cfg_attr(windows, link(name = "libnethost"))]
 #[cfg_attr(unix, link(name = "nethost", kind = "static"))]
 #[cfg_attr(
     all(unix, not(target_os = "macos")),
