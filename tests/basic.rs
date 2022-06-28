@@ -5,13 +5,17 @@ use coreclr_hosting_shared::StatusCode;
 #[test]
 fn returned_path_exists() {
     let mut buffer = Vec::new();
-    let mut buffer_size = 0;
+    let mut buffer_size = buffer.len();
+
     let result = unsafe { nethost_sys::get_hostfxr_path(buffer.as_mut_ptr(), &mut buffer_size, core::ptr::null()) };
     assert_eq!(result, StatusCode::HostApiBufferTooSmall as i32);
+    buffer.reserve(buffer_size);
 
     let result = unsafe { nethost_sys::get_hostfxr_path(buffer.as_mut_ptr(), &mut buffer_size, core::ptr::null()) };
     assert_eq!(result, StatusCode::Success as i32);
-    
+    unsafe { buffer.set_len(buffer_size) };
+
+    buffer.truncate(buffer_size - 1);
 
     #[cfg(windows)]
     let path = String::from_utf16(&buffer).unwrap();
