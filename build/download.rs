@@ -75,6 +75,7 @@ pub fn download_nethost_from_nuget() -> Result<PathBuf, Box<dyn std::error::Erro
         (Os::Linux,   Arch::ARM,     _) => "linux-arm",
         (Os::Linux,   Arch::AARCH64, _) => "linux-arm64",
         (Os::MacOs,   Arch::X86_64,  _) => "osx-x64",
+        (Os::MacOs,   Arch::AARCH64, _) => "osx-arm64",
         _ => panic!("platform not supported."),
     };
 
