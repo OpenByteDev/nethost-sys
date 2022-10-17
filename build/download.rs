@@ -7,7 +7,6 @@ use std::{
     path::{Path, PathBuf},
     str::FromStr,
 };
-use std::fmt::format;
 
 use build_target::{Arch, Env, Os};
 use semver::Version;
