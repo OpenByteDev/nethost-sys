@@ -29,15 +29,19 @@ struct Resource<'a> {
 #[derive(Debug, Serialize, Deserialize)]
 struct PackageInfoIndex<'a> {
     #[serde(rename = "items")]
-    pages: Vec<PackageInfoCatalogPage<'a>>,
+    pages: Vec<PackageInfoCatalogPageReference<'a>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct PackageInfoCatalogPage<'a> {
+struct PackageInfoCatalogPageReference<'a> {
     #[serde(rename = "@id")]
     url: Cow<'a, str>,
     lower: Cow<'a, str>,
     upper: Cow<'a, str>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct PackageInfoCatalogPage<'a> {
     items: Vec<PackageInfoCatalogPageEntry<'a>>,
 }
 
@@ -121,7 +125,14 @@ pub fn download_nethost(target: &str, target_path: &Path) -> Result<(), Box<dyn 
         .pages
         .into_iter()
         .max_by_key(|page| Version::from_str(page.upper.as_ref()).unwrap())
-        .expect("Unable to find package page.")
+        .expect("Unable to find package page.");
+
+    let package_page = client
+        .get(format!("{}", package_info.url))
+        .send()
+        .expect("Failed to retrieve package page.")
+        .json::<PackageInfoCatalogPage>()
+        .expect("Failed to parse json page response from nuget.org.")
         .items
         .into_iter()
         .map(|e| e.inner)
@@ -130,7 +141,7 @@ pub fn download_nethost(target: &str, target_path: &Path) -> Result<(), Box<dyn 
         .unwrap();
 
     let mut package_content_response = client
-        .get(package_info.content.as_ref())
+        .get(package_page.content.as_ref())
         .send()
         .expect("Failed to download nethost nuget package.");
 
