@@ -10,15 +10,15 @@ use std::{
 
 use build_target::{Arch, Env, Os};
 use semver::Version;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use zip::ZipArchive;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 struct ResourceIndex<'a> {
     resources: Vec<Resource<'a>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 struct Resource<'a> {
     #[serde(rename = "@id")]
     url: Cow<'a, str>,
@@ -26,35 +26,72 @@ struct Resource<'a> {
     r#type: Cow<'a, str>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 struct PackageInfoIndex<'a> {
     #[serde(rename = "items")]
     pages: Vec<PackageInfoCatalogPageReference<'a>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 struct PackageInfoCatalogPageReference<'a> {
     #[serde(rename = "@id")]
     url: Cow<'a, str>,
-    lower: Cow<'a, str>,
+    // lower: Cow<'a, str>,
     upper: Cow<'a, str>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
+enum PackageInfoCatalogPageResponse<'a> {
+    Root(PackageInfoCatalogRoot<'a>),
+    Page(PackageInfoCatalogPage<'a>),
+}
+
+impl<'de, 'a> serde::Deserialize<'de> for PackageInfoCatalogPageResponse<'a> {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let value = serde_json::Value::deserialize(d)?;
+        let types = match value.get("@type") {
+            Some(serde_json::Value::Array(types)) => types
+                .iter()
+                .map(|v| v.as_str().unwrap())
+                .collect::<Vec<_>>(),
+            Some(serde_json::Value::String(r#type)) => vec![r#type.as_str()],
+            f => unreachable!("encountered invalid @type field {f:?}"),
+        };
+
+        Ok(if types.contains(&"catalog:CatalogPage") {
+            PackageInfoCatalogPage::deserialize(value)
+                .map(Self::Page)
+                .unwrap()
+        } else if types.contains(&"catalog:CatalogRoot") {
+            PackageInfoCatalogRoot::deserialize(value)
+                .map(Self::Root)
+                .unwrap()
+        } else {
+            unreachable!()
+        })
+    }
+}
+
+#[derive(Debug, Deserialize, Clone)]
+struct PackageInfoCatalogRoot<'a> {
+    items: Vec<PackageInfoCatalogPage<'a>>,
+}
+
+#[derive(Debug, Deserialize, Clone)]
 struct PackageInfoCatalogPage<'a> {
     items: Vec<PackageInfoCatalogPageEntry<'a>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 struct PackageInfoCatalogPageEntry<'a> {
     #[serde(rename = "catalogEntry")]
     inner: PackageInfoCatalogEntry<'a>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 struct PackageInfoCatalogEntry<'a> {
-    #[serde(rename = "@id")]
-    url: Cow<'a, str>,
+    // #[serde(rename = "@id")]
+    // url: Cow<'a, str>,
     listed: bool,
     #[serde(rename = "packageContent")]
     content: Cow<'a, str>,
@@ -127,14 +164,21 @@ pub fn download_nethost(target: &str, target_path: &Path) -> Result<(), Box<dyn 
         .max_by_key(|page| Version::from_str(page.upper.as_ref()).unwrap())
         .expect("Unable to find package page.");
 
-    let package_page = client
+    let package_response = client
         .get(format!("{}", package_info.url))
         .send()
         .expect("Failed to retrieve package page.")
-        .json::<PackageInfoCatalogPage>()
-        .expect("Failed to parse json page response from nuget.org.")
-        .items
+        .json::<PackageInfoCatalogPageResponse>()
+        .expect("Failed to parse json page response from nuget.org.");
+
+    let package_pages = match package_response {
+        PackageInfoCatalogPageResponse::Page(page) => vec![page],
+        PackageInfoCatalogPageResponse::Root(root) => root.items,
+    };
+
+    let package_page = package_pages
         .into_iter()
+        .flat_map(|page| page.items.into_iter())
         .map(|e| e.inner)
         .filter(|e| e.listed)
         .max_by_key(|e| Version::from_str(e.version.as_ref()).unwrap())
