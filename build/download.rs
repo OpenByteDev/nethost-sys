@@ -105,8 +105,8 @@ pub fn download_nethost_from_nuget() -> Result<PathBuf, Box<dyn std::error::Erro
 
     #[rustfmt::skip]
     let target = match (&os, arch, env) {
-        (Os::Windows, Arch::X86,     _) => "win-x86",
-        (Os::Windows, Arch::X86_64,  _) => "win-x64",
+        (Os::Windows, Arch::X86,     Env::MSVC) => "win-x86",
+        (Os::Windows, Arch::X86_64,  Env::MSVC) => "win-x64",
         (Os::Windows, Arch::ARM,     _) => "win-arm",
         (Os::Windows, Arch::AARCH64, _) => "win-arm64",
         (Os::Linux,   Arch::X86_64,  Env::Musl) => "linux-musl-x64",
