@@ -43,17 +43,17 @@ extern "system" {
     /// Get the path to the `hostfxr` library.
     ///
     /// # Arguments
-    ///  * `buffer`:
-    ///     Buffer that will be populated with the hostfxr path, including a null terminator.
-    ///  * `buffer_size`:
-    ///     * \[in\] Size of buffer in [`char_t`] units.
-    ///     * \[out\] Size of buffer used in [`char_t`] units. If the input value is too small
-    ///           or `buffer` is [`null`](core::ptr::null()), this is populated with the minimum required size
-    ///           in [`char_t`] units for a buffer to hold the hostfxr path
+    /// * `buffer`:
+    ///   Buffer that will be populated with the hostfxr path, including a null terminator.
+    /// * `buffer_size`:
+    ///    * \[in\] Size of buffer in [`char_t`] units.
+    ///    * \[out\] Size of buffer used in [`char_t`] units. If the input value is too small
+    ///      or `buffer` is [`null`](core::ptr::null()), this is populated with the minimum required size
+    ///      in [`char_t`] units for a buffer to hold the hostfxr path
     ///
     /// * `get_hostfxr_parameters`:
-    ///     Optional. Parameters that modify the behaviour for locating the hostfxr library.
-    ///     If [`null`](core::ptr::null()), hostfxr is located using the enviroment variable or global registration
+    ///   Optional. Parameters that modify the behaviour for locating the hostfxr library.
+    ///   If [`null`](core::ptr::null()), hostfxr is located using the enviroment variable or global registration
     ///
     /// # Return value
     ///  * `0` on success, otherwise failure
