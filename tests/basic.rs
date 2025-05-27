@@ -1,13 +1,10 @@
 use std::path::Path;
 
-use coreclr_hosting_shared::StatusCode;
+use coreclr_hosting_shared::{StatusCode, char_t};
 
 #[test]
 fn returned_path_exists() {
-    #[cfg(windows)]
-    let mut buffer: Vec<u16> = Vec::new();
-    #[cfg(not(windows))]
-    let mut buffer: Vec<u8> = Vec::new();
+    let mut buffer: Vec<char_t> = Vec::new();
     let mut buffer_size = buffer.len();
 
     let result = unsafe {
