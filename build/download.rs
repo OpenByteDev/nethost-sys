@@ -46,7 +46,7 @@ enum PackageInfoCatalogPageResponse<'a> {
     Page(PackageInfoCatalogPage<'a>),
 }
 
-impl<'de, 'a> serde::Deserialize<'de> for PackageInfoCatalogPageResponse<'a> {
+impl<'de> serde::Deserialize<'de> for PackageInfoCatalogPageResponse<'_> {
     fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
         let value = serde_json::Value::deserialize(d)?;
         let types = match value.get("@type") {
@@ -152,8 +152,7 @@ pub fn download_nethost(target: &str, target_path: &Path) -> Result<(), Box<dyn 
 
     let package_info = client
         .get(format!(
-            "{}runtime.{}.microsoft.netcore.dotnetapphost/index.json",
-            registrations_base_url, target
+            "{registrations_base_url}runtime.{target}.microsoft.netcore.dotnetapphost/index.json"
         ))
         .send()
         .expect("Failed to find package on nuget.org.")
@@ -195,7 +194,7 @@ pub fn download_nethost(target: &str, target_path: &Path) -> Result<(), Box<dyn 
     let reader = Cursor::new(buf);
     let mut archive = ZipArchive::new(reader)?;
 
-    let runtime_dir_path = format!("runtimes/{}/native", target);
+    let runtime_dir_path = format!("runtimes/{target}/native");
 
     for i in 0..archive.len() {
         let mut file = archive.by_index(i)?;
@@ -225,7 +224,7 @@ pub fn download_nethost(target: &str, target_path: &Path) -> Result<(), Box<dyn 
             continue;
         }
 
-        let mut out_file = File::create(target_path.join(out_path.components().last().unwrap()))?;
+        let mut out_file = File::create(target_path.join(out_path.components().next_back().unwrap()))?;
         io::copy(&mut file, &mut out_file)?;
     }
 
