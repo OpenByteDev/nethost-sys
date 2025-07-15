@@ -99,24 +99,24 @@ struct PackageInfoCatalogEntry<'a> {
 }
 
 pub fn download_nethost_from_nuget() -> Result<PathBuf, Box<dyn std::error::Error>> {
-    let os = Os::target().unwrap();
-    let arch = Arch::target().unwrap();
-    let env = Env::target().unwrap();
+    let os = Os::target();
+    let arch = Arch::target();
+    let env = Env::target();
 
     #[rustfmt::skip]
-    let target = match (&os, arch, env) {
-        (Os::Windows, Arch::X86,     Env::MSVC) => "win-x86",
-        (Os::Windows, Arch::X86_64,  Env::MSVC) => "win-x64",
-        (Os::Windows, Arch::ARM,     _) => "win-arm",
-        (Os::Windows, Arch::AARCH64, _) => "win-arm64",
-        (Os::Linux,   Arch::X86_64,  Env::Musl) => "linux-musl-x64",
-        (Os::Linux,   Arch::ARM,     Env::Musl) => "linux-musl-arm",
-        (Os::Linux,   Arch::AARCH64, Env::Musl) => "linux-musl-arm64",
+    let target = match (os, arch, env) {
+        (Os::Windows, Arch::X86,     Some(Env::Msvc)) => "win-x86",
+        (Os::Windows, Arch::X86_64,  Some(Env::Msvc)) => "win-x64",
+        (Os::Windows, Arch::Arm,     _) => "win-arm",
+        (Os::Windows, Arch::AArch64, _) => "win-arm64",
+        (Os::Linux,   Arch::X86_64,  Some(Env::Musl)) => "linux-musl-x64",
+        (Os::Linux,   Arch::Arm,     Some(Env::Musl)) => "linux-musl-arm",
+        (Os::Linux,   Arch::AArch64, Some(Env::Musl)) => "linux-musl-arm64",
         (Os::Linux,   Arch::X86_64,  _) => "linux-x64",
-        (Os::Linux,   Arch::ARM,     _) => "linux-arm",
-        (Os::Linux,   Arch::AARCH64, _) => "linux-arm64",
-        (Os::MacOs,   Arch::X86_64,  _) => "osx-x64",
-        (Os::MacOs,   Arch::AARCH64, _) => "osx-arm64",
+        (Os::Linux,   Arch::Arm,     _) => "linux-arm",
+        (Os::Linux,   Arch::AArch64, _) => "linux-arm64",
+        (Os::MacOS,   Arch::X86_64,  _) => "osx-x64",
+        (Os::MacOS,   Arch::AArch64, _) => "osx-arm64",
         _ => panic!("platform not supported."),
     };
 
@@ -224,7 +224,8 @@ pub fn download_nethost(target: &str, target_path: &Path) -> Result<(), Box<dyn 
             continue;
         }
 
-        let mut out_file = File::create(target_path.join(out_path.components().next_back().unwrap()))?;
+        let mut out_file =
+            File::create(target_path.join(out_path.components().next_back().unwrap()))?;
         io::copy(&mut file, &mut out_file)?;
     }
 

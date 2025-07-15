@@ -8,7 +8,7 @@ fn returned_path_exists() {
     let mut buffer: Vec<u16> = Vec::new();
     #[cfg(not(windows))]
     let mut buffer: Vec<u8> = Vec::new();
-    
+
     let mut buffer_size = buffer.len();
 
     let result = unsafe {
