@@ -3,7 +3,7 @@ use std::{
     env,
     error::Error,
     fs::{create_dir_all, File},
-    io::{self, Cursor, Read},
+    io::{self, Cursor},
     path::{Path, PathBuf},
     str::FromStr,
 };
@@ -135,13 +135,14 @@ pub fn download_nethost_from_nuget() -> Result<PathBuf, Box<dyn std::error::Erro
 }
 
 pub fn download_nethost(target: &str, target_path: &Path) -> Result<(), Box<dyn Error>> {
-    let client = reqwest::blocking::Client::new();
+    let client = ureq::agent();
 
     let index = client
         .get("https://api.nuget.org/v3/index.json")
-        .send()
+        .call()
         .expect("Failed to query nuget.org index for nethost package. Are you connected to the internet?")
-        .json::<ResourceIndex>()
+        .body_mut()
+        .read_json::<ResourceIndex>()
         .expect("Failed to parse json response from nuget.org.");
     let registrations_base_url = index
         .resources
@@ -154,9 +155,10 @@ pub fn download_nethost(target: &str, target_path: &Path) -> Result<(), Box<dyn 
         .get(format!(
             "{registrations_base_url}runtime.{target}.microsoft.netcore.dotnetapphost/index.json"
         ))
-        .send()
+        .call()
         .expect("Failed to find package on nuget.org.")
-        .json::<PackageInfoIndex>()
+        .body_mut()
+        .read_json::<PackageInfoIndex>()
         .expect("Failed to parse json response from nuget.org.")
         .pages
         .into_iter()
@@ -165,9 +167,10 @@ pub fn download_nethost(target: &str, target_path: &Path) -> Result<(), Box<dyn 
 
     let package_response = client
         .get(format!("{}", package_info.url))
-        .send()
+        .call()
         .expect("Failed to retrieve package page.")
-        .json::<PackageInfoCatalogPageResponse>()
+        .body_mut()
+        .read_json::<PackageInfoCatalogPageResponse>()
         .expect("Failed to parse json page response from nuget.org.");
 
     let package_pages = match package_response {
@@ -185,11 +188,10 @@ pub fn download_nethost(target: &str, target_path: &Path) -> Result<(), Box<dyn 
 
     let mut package_content_response = client
         .get(package_page.content.as_ref())
-        .send()
+        .call()
         .expect("Failed to download nethost nuget package.");
 
-    let mut buf: Vec<u8> = Vec::new();
-    package_content_response.read_to_end(&mut buf)?;
+    let buf = package_content_response.body_mut().read_to_vec()?;
 
     let reader = Cursor::new(buf);
     let mut archive = ZipArchive::new(reader)?;
