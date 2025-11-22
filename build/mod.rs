@@ -11,6 +11,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // For more information see https://github.com/OpenByteDev/netcorehost/issues/2.
     if build_target::target_os() == Os::Windows {
         cargo_emit::rustc_link_lib!("libnethost");
+        cargo_emit::rustc_link_lib!("advapi32");
     }
 
     Ok(())
