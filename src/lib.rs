@@ -1,5 +1,5 @@
 #![no_std]
-#![warn(clippy::pedantic, clippy::cargo, unsafe_op_in_unsafe_fn)]
+#![warn(clippy::pedantic, clippy::cargo)]
 #![allow(
     clippy::missing_safety_doc,
     clippy::missing_errors_doc,
@@ -39,7 +39,7 @@ use coreclr_hosting_shared::{char_t, size_t};
     link(name = "stdc++", kind = "dylib")
 )]
 #[cfg_attr(target_os = "macos", link(name = "c++", kind = "dylib"))]
-extern "system" {
+unsafe extern "system" {
     /// Get the path to the `hostfxr` library.
     ///
     /// # Arguments
