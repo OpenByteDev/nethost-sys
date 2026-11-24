@@ -2,7 +2,7 @@ use std::{
     borrow::Cow,
     env,
     error::Error,
-    fs::{create_dir_all, File},
+    fs::{File, create_dir_all},
     io::{self, Cursor},
     path::{Path, PathBuf},
     str::FromStr,
