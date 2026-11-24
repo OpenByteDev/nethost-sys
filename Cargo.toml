@@ -27,3 +27,6 @@ zip = { version = "9.8", optional = true }
 
 [features]
 download-nuget = ["ureq", "serde", "serde_json", "semver", "zip"]
+default = ["link-cxx"]
+# Link the C++ standard library, needed by nethost <= 10.0 on Linux and macOS.
+link-cxx = []

@@ -34,11 +34,15 @@ use coreclr_hosting_shared::{char_t, size_t};
 // for some reason we need the link attribute here for unix, but the rustc argument in build.rs for windows.
 // #[cfg_attr(windows, link(name = "libnethost"))]
 #[cfg_attr(unix, link(name = "nethost", kind = "static"))]
+// C++ runtime for nethost <= 10.0 (11.0+ is C).
 #[cfg_attr(
-    all(unix, not(target_os = "macos")),
+    all(feature = "link-cxx", unix, not(target_os = "macos")),
     link(name = "stdc++", kind = "dylib")
 )]
-#[cfg_attr(target_os = "macos", link(name = "c++", kind = "dylib"))]
+#[cfg_attr(
+    all(feature = "link-cxx", target_os = "macos"),
+    link(name = "c++", kind = "dylib")
+)]
 unsafe extern "system" {
     /// Get the path to the `hostfxr` library.
     ///
