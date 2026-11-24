@@ -31,8 +31,18 @@
 use core::{mem, ptr};
 use coreclr_hosting_shared::{char_t, size_t};
 
-// for some reason we need the link attribute here for unix, but the rustc argument in build.rs for windows.
-// #[cfg_attr(windows, link(name = "libnethost"))]
+// -bundle disables bundling and keeps pdb findable (LNK4099).
+#[cfg_attr(
+    windows,
+    link(name = "libnethost", kind = "static", modifiers = "-bundle")
+)]
+// nethost uses registry for the path lookup
+#[cfg_attr(windows, link(name = "advapi32"))]
+// libnethost.lib is built with /MT (static CRT); this attr avoids the clash with the dynamic CRT (LNK4098).
+#[cfg_attr(
+    all(windows, target_env = "msvc", not(target_feature = "crt-static")),
+    link(name = "/NODEFAULTLIB:libcmt", kind = "dylib", modifiers = "+verbatim")
+)]
 #[cfg_attr(unix, link(name = "nethost", kind = "static"))]
 // C++ runtime for nethost <= 10.0 (11.0+ is C).
 #[cfg_attr(

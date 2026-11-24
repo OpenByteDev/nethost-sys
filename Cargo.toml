@@ -17,8 +17,8 @@ build = "build/mod.rs"
 coreclr-hosting-shared = "0.1"
 
 [build-dependencies]
-build-target = "0.8"
-cargo-emit = "0.2"
+build-target = { version = "0.8", optional = true }
+cargo-emit = { version = "0.2", optional = true }
 ureq = { version = "3.5", features = ["json"], optional = true }
 serde = { version = "1.0", features = ["derive"], optional = true }
 serde_json = { version = "1.0", optional = true }
@@ -26,7 +26,7 @@ semver = { version = "1.0", optional = true }
 zip = { version = "9.8", optional = true }
 
 [features]
-download-nuget = ["ureq", "serde", "serde_json", "semver", "zip"]
 default = ["link-cxx"]
+download-nuget = ["dep:build-target", "dep:cargo-emit", "ureq", "serde", "serde_json", "semver", "zip"]
 # Link the C++ standard library, needed by nethost <= 10.0 on Linux and macOS.
 link-cxx = []
